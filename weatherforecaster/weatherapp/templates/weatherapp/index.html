@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="heading">Weather App 🌤</h1>
+
+    <!-- 🔍 FORM -->
+    <form method="POST" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="input-wrapper">
+            <input 
+                type="text" 
+                id="cityInput" 
+                name="city" 
+                placeholder="Enter city..." 
+                onkeyup="getCities()"
+            >
+
+            <input type="hidden" id="lat" name="lat">
+            <input type="hidden" id="lon" name="lon">
+
+            <ul id="suggestions" class="dropdown"></ul>
+        </div>
+
+        <button type="submit" class="btn">Search</button>
+    </form>
+
+    <!-- 🌤 CURRENT WEATHER -->
+    {% if current %}
+    <div class="weather">
+        <div class="left">
+            <h2 class="temp">{{ current.main.temp }}&#176; C</h2>
+            <h2 class="city">{{ city }}</h2>
+        </div>
+
+        <div class="right">
+            {% if current.weather and current.weather.0.icon %}
+                <img src="https://openweathermap.org/img/wn/{{ current.weather.0.icon }}@2x.png">
+            {% else %}
+                <img src="https://openweathermap.org/img/wn/01d@2x.png">
+            {% endif %}
+            <p>{{ current.weather.0.description }}</p>
+            <p> {{ d.weather.0.icon }}</p>
+            <p>{{ day }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 📅 FORECAST -->
+    <h2 class="forecast-title">5-Day Forecast</h2>
+
+    <div class="forecast">
+        {% for d in daily %}
+        <div class="forecast-day">
+
+            <p>{{ d.dt_txt|slice:":10" }}</p>
+
+            {% if d.weather and d.weather.0.icon %}
+                <img src="https://openweathermap.org/img/wn/{{ d.weather.0.icon }}@2x.png">
+            {% else %}
+                <img src="https://openweathermap.org/img/wn/01d@2x.png">
+            {% endif %}
+
+            <p>{{ d.main.temp }}°C</p>
+
+            <p>
+                {% if d.weather %}
+                    {{ d.weather.0.main }}
+                {% else %}
+                    Clear
+                {% endif %}
+            </p>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- ⚡ JS -->
+<script>
+async function getCities() {
+    let input = document.getElementById("cityInput").value;
+
+    if (input.length < 2) {
+        document.getElementById("suggestions").innerHTML = "";
+        return;
+    }
+
+    let res = await fetch(`/get-cities/?q=${input}`);
+    let data = await res.json();
+
+    let list = document.getElementById("suggestions");
+    list.innerHTML = "";
+
+    data.forEach(city => {
+        let li = document.createElement("li");
+
+        li.textContent = `${city.name}${city.state ? ", " + city.state : ""}, ${city.country}`;
+
+        li.onclick = () => {
+            document.getElementById("cityInput").value = city.name;
+            document.getElementById("lat").value = city.lat;
+            document.getElementById("lon").value = city.lon;
+            list.innerHTML = "";
+        };
+
+        list.appendChild(li);
+    });
+}
+
+// close dropdown
+document.addEventListener("click", function(e) {
+    if (!document.getElementById("cityInput").contains(e.target)) {
+        document.getElementById("suggestions").innerHTML = "";
+    }
+});
+</script>
+
+</body>
+</html>
