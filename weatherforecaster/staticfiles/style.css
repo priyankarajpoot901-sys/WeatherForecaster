@@ -1,0 +1,164 @@
+/* BODY */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+}
+
+.container {
+  width: 60%;
+  max-width: 700px;
+  padding: 2rem;
+
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(12px);
+
+  border-radius: 20px;
+  text-align: center;
+}
+
+.heading {
+  margin-bottom: 20px;
+}
+
+/* FORM */
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+}
+
+/* BUTTON */
+.btn {
+  width: 120px;
+  height: 45px;
+  flex-shrink: 0;
+
+  border: 2px solid #00c6ff;
+  color: #00c6ff;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #00c6ff;
+  color: black;
+}
+
+/* WEATHER */
+.weather {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.left, .right {
+  width: 48%;
+  padding: 1rem;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.1);
+}
+
+.temp {
+  font-size: 2.5rem;
+}
+
+/* FORECAST */
+.forecast {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.forecast-day {
+  min-width: 120px;
+  flex: 0 0 auto;
+
+  background: rgba(255,255,255,0.15);
+  border-radius: 15px;
+  padding: 10px;
+  text-align: center;
+}
+
+.forecast-day img {
+  width: 50px;
+}
+
+/* DROPDOWN */
+.dropdown {
+  list-style: none;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+
+  background: white;
+  color: black;
+
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 200px;
+  overflow-y: auto;
+
+  text-align: left;
+}
+
+.dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown li:hover {
+  background: #eee;
+}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .container{
+    width:90%;
+  }
+
+  .weather{
+    flex-direction:column;
+  }
+
+  .left,.right{
+    width:100%;
+    margin-top:10px;
+  }
+
+  form{
+    flex-direction:column;
+  }
+
+  .btn{
+    width:100%;
+  }
+}
